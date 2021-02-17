@@ -23,7 +23,7 @@ class YoutubeApi
      * @throws HttpClientException
      */
     public static function getChannels(string $youtubeId): array {
-        $apiKey = 'AIzaSyARiGB2m2ZRE04VG2q-Ga9-GN441PSZ3lY'; // ToDo: Store this in config management
+        $apiKey = 'fakeApiKey33kj3lk2j34p2j4k'; // ToDo: Store this in config management for security
 
         // This is nice and simple for our purposes
         $response = Http::get("https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=$youtubeId&key=$apiKey");

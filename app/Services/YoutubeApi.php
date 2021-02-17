@@ -12,8 +12,11 @@ class YoutubeApi
 {
     /**
      * Get the subscriber count of a given YouTube channel id
+     *
+     * @param string $youtubeId
+     * @return int
      */
-    public function getSubscriberCount() {
+    public static function getSubscriberCount(string $youtubeId): int {
 //        $client = new Google_Client();
 //        $client->setApplicationName('API code samples');
 //        $client->setScopes([
@@ -46,5 +49,6 @@ class YoutubeApi
 //
 //        $response = $service->channels->listChannels('snippet,contentDetails,statistics', $queryParams);
 //        print_r($response);
+        return rand(0, 500000);
     }
 }

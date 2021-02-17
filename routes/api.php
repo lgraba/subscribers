@@ -19,14 +19,15 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+});
 
-    Route::group([
-        'prefix' => 'channel',
-    ], function () {
-        // Get a current subscriber count of the given channel
-        Route::get('/{channel}/subscriber/count', [ChannelController::class, 'subscriberCount']);
+// ToDo: Move these inside the auth middleware group above for authentication
+Route::group([
+    'prefix' => 'channel',
+], function () {
+    // Get a current subscriber count of the given channel
+    Route::get('/{youtubeId}/subscriber/count', [ChannelController::class, 'subscriberCount']);
 
-        // Get the subscriber history of the given channel
-        Route::get('/{channel}/subscriber/history', [ChannelController::class, 'subscriberHistory']);
-    });
+    // Get the subscriber history of the given channel
+    Route::get('/{youtubeId}/subscriber/history', [ChannelController::class, 'subscriberHistory']);
 });

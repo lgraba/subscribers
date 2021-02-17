@@ -23,8 +23,11 @@ class CreateChannelsTable extends Migration
             $table->string('youtube_id')->comment('The YouTube channel id');
             $table->string('title')->comment('The YouTube channel title');
             $table->string('description')->comment('The YouTube channel description');
-            $table->date('retrieved_at')->comment('The last datetime channel statistics were retrieved');
+            $table->date('retrieved_at')->nullable()
+                ->comment('The last datetime channel statistics were retrieved');
             $table->timestamps();
+
+            $table->index('youtube_id');
         });
     }
 

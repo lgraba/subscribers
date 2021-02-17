@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Channel;
+use App\Models\Subscription;
 use App\Services\YoutubeApi;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
@@ -15,22 +17,42 @@ class ChannelController extends BaseController
 
     public function subscriberCount(string $youtubeId) {
         // Get current subscriber count via API call to YT
-        return ['subscribers' => YoutubeApi::getSubscriberCount($youtubeId)];
+        try {
+            $channelInfo = YoutubeApi::getChannel($youtubeId);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
 
-        // ToDo: If the channel doesn't exist in our DB, create with info from YT call
+        // Create Channel in our DB if it doesn't already exist
+        $channel = Channel::firstOrCreate(
+            ['youtube_id' => $youtubeId],
+            [
+                'title'       => $channelInfo['snippet']['title'],
+                'description' => $channelInfo['snippet']['description']
+            ]);
+
+        $subscriberCount = $channelInfo['statistics']['subscriberCount'];
+
+        // Write Subscription to DB (only up to one record/day/channel)
+        Subscription::updateOrCreate(
+            ['channel_id' => $channel->id, 'date' => Carbon::now()->format('Y-m-d')],
+            ['count' => $subscriberCount]
+        );
+
+        return ['subscribers' => $subscriberCount];
     }
 
     public function subscriberHistory(string $youtubeId) {
         // Get daily subscriber history from DB
         $channel = Channel::where('youtube_id', $youtubeId)->firstOrFail();
 
-        $subs = $channel->subscriptions()->select(['created_at', 'count'])->get();
+        $subs = $channel->subscriptions()->select(['date', 'count'])->orderBy('date')->get();
 
         $subscriberHistory = collect([]);
 
         foreach ($subs as $sub) {
             $subscriberHistory[] = [
-                'date'  => $sub->created_at->format('Y-m-d'),
+                'date'  => $sub->date,
                 'count' => $sub->count,
                 'delta' => isset($previousSub) ? $sub->count - $previousSub['count'] : null // ToDo: Handle deltas in DB
             ];
@@ -40,6 +62,6 @@ class ChannelController extends BaseController
 
         return $subscriberHistory;
 
-        // ToDo: If the channel doesn't exist in our DB, create with info from YT call
+        // ToDo: If the channel doesn't exist in our DB, we could create it here (see subscriberCount)
     }
 }

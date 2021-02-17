@@ -10,6 +10,16 @@ class Subscription extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'channel_id',
+        'date',
+        'count'
+    ];
+
+    protected $dates = [
+        'date' => 'date:Y-m-d'
+    ];
+
     /**
      * The Channel this Subscription record belongs to
      * @return BelongsTo

@@ -10,6 +10,15 @@ class Channel extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'youtube_id',
+        'title',
+        'description',
+        'retrieved_at'
+    ];
+
+    protected $dates = ['retrieved_at'];
+
     /**
      * The Subscription records for this Channel
      * @return HasMany

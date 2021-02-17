@@ -20,7 +20,7 @@ class CreateChannelsTable extends Migration
         // Name would be more verbose + additional columns in a full-scale application
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
-            $table->string('youtube_id')->comment('The YouTube channel id');
+            $table->string('youtube_id')->unique()->comment('The YouTube channel id');
             $table->string('title')->comment('The YouTube channel title');
             $table->string('description')->comment('The YouTube channel description');
             $table->date('retrieved_at')->nullable()

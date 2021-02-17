@@ -25,6 +25,8 @@ class CreateSubscriptionsTable extends Migration
                 ->comment('The channel this subscription record pertains to')
                 ->constrained();
 
+            $table->date('date')->comment('The day this subscriber count represents');
+
             $table->integer('count')->default(0)
                 ->comment('The number of subscriptions for the given channel');
 

@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Http;
 class YoutubeApi
 {
     /**
-     * Get the info, including stats, of a given YouTube channel id
+     * Get the info, including stats, of one or more YouTube channels
      *
      * @param string $youtubeId
      * @return array
      * @throws HttpClientException
      */
-    public static function getChannel(string $youtubeId): array {
+    public static function getChannels(string $youtubeId): array {
         $apiKey = 'AIzaSyARiGB2m2ZRE04VG2q-Ga9-GN441PSZ3lY'; // ToDo: Store this in config management
 
         // This is nice and simple for our purposes
@@ -33,7 +33,7 @@ class YoutubeApi
             throw new HttpClientException('Failed to retrieve YouTube channel data for channel ' . $youtubeId);
         }
 
-        return $response['items'][0];
+        return $response['items'];
 
         // Using the Google API Client is a possibility, though (example follows)
 //        $client = new Google_Client();

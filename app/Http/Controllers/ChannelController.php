@@ -18,7 +18,7 @@ class ChannelController extends BaseController
     public function subscriberCount(string $youtubeId) {
         // Get current subscriber count via API call to YT
         try {
-            $channelInfo = YoutubeApi::getChannel($youtubeId);
+            $channelInfo = YoutubeApi::getChannels($youtubeId)[0];
         } catch (\Exception $e) {
             return $e->getMessage();
         }
@@ -27,8 +27,8 @@ class ChannelController extends BaseController
         $channel = Channel::firstOrCreate(
             ['youtube_id' => $youtubeId],
             [
-                'title'       => $channelInfo['snippet']['title'],
-                'description' => $channelInfo['snippet']['description']
+                'title'        => $channelInfo['snippet']['title'],
+                'description'  => $channelInfo['snippet']['description']
             ]);
 
         $subscriberCount = $channelInfo['statistics']['subscriberCount'];
@@ -38,6 +38,10 @@ class ChannelController extends BaseController
             ['channel_id' => $channel->id, 'date' => Carbon::now()->format('Y-m-d')],
             ['count' => $subscriberCount]
         );
+
+        // Update channels.retrieved_at in case this is useful for some future functionality
+        $channel->retrieved_at = Carbon::now();
+        $channel->save();
 
         return ['subscribers' => $subscriberCount];
     }

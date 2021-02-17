@@ -1,5 +1,5 @@
 ## Subscribers Take-Home
-Completed by Logan Graba *February 16, 2020*
+Created by Logan Graba *February 17, 2020*
 
 Keep track of the number of subscribers YouTube channels have, with up to one entry per day per channel.
 
@@ -13,6 +13,8 @@ Further:
 Use [Laravel Task Scheduling](https://laravel.com/docs/8.x/scheduling) to create a daily task. This daily task would
 run a (hopefully bulk) data retrieval request to get the daily subscriber counts of all pertinent channels and write
 these to the database.
+
+**-> For a quick implementation see GetChannels Command and how it's scheduled in Kernel**
 
 ## Versions
 Laravel 8

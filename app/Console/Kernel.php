@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\GetChannels;
+use App\Console\Commands\QueueChannels;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(GetChannels::class)->daily();
+        $schedule->command(QueueChannels::class)->daily();
     }
 
     /**
